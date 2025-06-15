@@ -1,0 +1,22 @@
+{
+  "dependencies": {
+    "cors": "^2.8.5",
+    "dotenv": "^16.5.0",
+    "express": "^5.1.0",
+    "mongodb": "^6.17.0",
+    "mysql2": "^3.14.1"
+  },
+  "devDependencies": {
+    "nodemon": "^3.1.10"
+  },
+  "scripts": {
+    "start": "node server.js"
+  },
+  "name": "ashararcbackend",
+  "description": "��#\u0000 \u0000A\u0000s\u0000h\u0000a\u0000r\u0000a\u0000R\u0000C\u0000A\u0000P\u0000I\u0000\r\u0000 \u0000",
+  "version": "1.0.0",
+  "main": "server.js",
+  "keywords": [],
+  "author": "",
+  "license": "ISC"
+}

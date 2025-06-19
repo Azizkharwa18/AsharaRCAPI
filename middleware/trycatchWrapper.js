@@ -1,4 +1,4 @@
-import {createCustomError} from "../errors/customError.js";
+import {createCustomError} from "./../errors/customError.js";
 
 export function tryCatchWrapper(func){
     return async (requestAnimationFrame,resizeBy,next)=>{

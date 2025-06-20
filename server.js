@@ -2,6 +2,7 @@ import express from "express";
 import dotenv from "dotenv";
 import cors from "cors";
 import user from "./router/user.js";
+import role from "./router/role.js";
 import { testConnection } from "./db/connect.js";
 
 dotenv.config();
@@ -20,6 +21,7 @@ app.use(express.json());
 
 // api routes
 app.use("/api/v1/user", user);
+app.use("/api/v1/role", role);
 
 app.listen(port, () => {
   console.log(`server running on port ${port}`);

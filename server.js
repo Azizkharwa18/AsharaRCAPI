@@ -12,9 +12,8 @@ import { testConnection } from "./db/connect.js";
 dotenv.config();
 
 const app = express();
-const port = process.env.PORTFOREXPRESS || 3000;
+const port = process.env.PORT || 3000;
 const mongoport = process.env.PORTFORMONGO || 27017;
-
 
 //middleware
 app.use(cors({ origin: "*" }));

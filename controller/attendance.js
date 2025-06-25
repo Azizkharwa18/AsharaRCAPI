@@ -3,8 +3,8 @@
  * @route POST /attendance
  */
 
-import { tryCatchWrapper } from "./../middleware/tryCatchWrapper.js";
-import { pool } from "./../db/connect.js"
+import { tryCatchWrapper } from "../middleware/tryCatchWrapper.js";
+import { pool } from "../db/connect.js"
 import { createBadRequest } from "../middleware/bad-request.js";
 import { StatusCodes } from "http-status-codes";
 import xlsx from 'xlsx';
@@ -29,13 +29,11 @@ export const createAttendance=tryCatchWrapper(async function(req,res,next){
                  data: string
              })
              })
-
-     
 })
 
 
 export const getAttendance=tryCatchWrapper(async function(req,res,next){
-    let sql=`select event_session_id,event_session.its,isPresent,person.name from event_session inner join person on person.its=event_session.its where event_session_id=400`
+    let sql=`select event_session_id,event_session.its,isPresent,person.name from event_session inner join person on person.its=event_session.its where event_session_id=400 order by (person.name)`
 
     await pool.query(sql).then((result)=>{
         return res.status(StatusCodes.OK).json({

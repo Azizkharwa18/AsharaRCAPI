@@ -14,7 +14,7 @@ dotenv.config();
 const app = express();
 const port = process.env.PORTFOREXPRESS || 3000;
 const mongoport = process.env.PORTFORMONGO || 27017;
-
+const host="192.168.0.107";
 
 //middleware
 app.use(cors({ origin: "*" }));
@@ -43,8 +43,8 @@ start()
 
 testConnection();
 
-app.listen(port, () => {
-  console.log(`Express server running on port ${port}`);
+app.listen(port,host, () => {
+  console.log(`Express server running on port ${host}:${port}`);
 });
 
 

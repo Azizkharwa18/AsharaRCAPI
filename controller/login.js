@@ -1,6 +1,6 @@
-import { tryCatchWrapper } from "./../middleware/tryCatchWrapper.js"
-import { createBadRequest } from "./../middleware/bad-request.js";
-import { unauthenticatedError } from "./../middleware/unauthenticated.js"
+import { tryCatchWrapper } from "../middleware/tryCatchWrapper.js"
+import { createBadRequest } from "../middleware/bad-request.js";
+import { unauthenticatedError } from "../middleware/unauthenticated.js"
 import { StatusCodes } from "http-status-codes";
 import Login from '../model/login.js';
 

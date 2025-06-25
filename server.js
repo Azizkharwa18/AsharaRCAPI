@@ -15,7 +15,6 @@ const app = express();
 const port = process.env.PORTFOREXPRESS || 3000;
 const mongoport = process.env.PORTFORMONGO || 27017;
 
-
 //middleware
 app.use(cors({ origin: "*" }));
 app.set('trust proxy', true);

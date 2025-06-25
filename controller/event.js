@@ -3,7 +3,7 @@
  * @route POST /event
  */
 
-import { tryCatchWrapper } from "../middleware/tryCatchWrapper.js";
+import { tryCatchWrapper } from "../middleware/trycatchWrapper.js";
 import { pool } from "../db/connect.js"
 import { createBadRequest } from "../middleware/bad-request.js";
 import { StatusCodes } from "http-status-codes";

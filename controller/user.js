@@ -3,7 +3,7 @@
  * @route POST /person
  */
 
-import { tryCatchWrapper } from "../middleware/tryCatchWrapper.js";
+import { tryCatchWrapper } from "../middleware/trycatchWrapper.js";
 import { createCustomError } from "../errors/customError.js";
 import { pool } from "../db/connect.js"
 import { createBadRequest } from "../middleware/bad-request.js";

@@ -1,4 +1,4 @@
-import { tryCatchWrapper } from "../middleware/tryCatchWrapper.js"
+import { tryCatchWrapper } from "../middleware/trycatchWrapper.js"
 import { createBadRequest } from "../middleware/bad-request.js";
 import { unauthenticatedError } from "../middleware/unauthenticated.js"
 import { StatusCodes } from "http-status-codes";

@@ -9,11 +9,12 @@ import { pool } from "./../db/connect.js"
 import { createBadRequest } from "../middleware/bad-request.js";
 import { unauthenticatedError } from "../middleware/unauthenticated.js";
 import { StatusCodes } from "http-status-codes";
+import xlsx from "xlsx";
 
 
 //Create a New User
 export const createUser = tryCatchWrapper(async function (req, res, next) {
-  console.log("Req:", req.body)
+  console.log("createUser() Req:", req.body)
   const { its, name, age, whatsapp, contact_no, zone } = req.body;
   if (!its || !name || !age || !whatsapp || !contact_no || !zone) {
     return next(createBadRequest("All fields are required"));
@@ -26,16 +27,25 @@ export const createUser = tryCatchWrapper(async function (req, res, next) {
 });
 
 //Create New Users In Bulk
-export const creaetBulkUser = tryCatchWrapper(async function (req, res, next) {
-  console.log("Req:", req.body)
-  const { list } = req.body;
+export const creatBulkUser = tryCatchWrapper(async function (req, res, next) {
+  console.log("creatBulkUser() Req:", req.body)
+
+  const file = xlsx.readFile('assets/combined_members_list.xlsx')
+  // // const temp = xlsx.utils.sheet_to_json(file.Sheets[file.SheetNames[0]])
+  var string = "";
+  console.log("temp:", temp.length);
+  /*const { list } = req.body;
   if (!list) {
     return next(createBadRequest("All fields are required"));
   }
 
   let sql = "INSERT INTO person (its,name,age,whatsapp,contact_no,zone) VALUES ?";
   await pool.query(sql, [list]);
+*/
 
+  let sql = `INSERT INTO person (its,name,whatsapp,contact_no,zone) VALUES ${string}`;
+  console.log("SQL:", sql);
+  await pool.query(sql);
   return res.status(StatusCodes.CREATED).json({ message: "Users has been Created" });
 });
 
@@ -69,6 +79,7 @@ export const deleteUser = tryCatchWrapper(async function (req, res, next) {
 
   return res.status(200).json({ message: "User has been Deleted" });
 });
+
 
 
 //Activate Or Deactivate Current User
@@ -113,8 +124,8 @@ export const getUser = tryCatchWrapper(async function (req, res, next) {
 export const getAllUser = tryCatchWrapper(async function (req, res, next) {
   console.log("getAllUser() Req:")
 
-  let sql = "select p.its,p.name,p.age,p.whatsapp,p.contact_no,p.zone,r.roleName from person as p inner join rolemaster as r on p.role_id = r.roleId where p.isActive = 1";
+  let sql = "select p.its,p.name,p.age,p.whatsapp,p.contact_no,p.zone,r.roleName from person as p inner join rolemaster as r on p.role_id = r.roleId where p.isActive = 1 order by zone,role_id";
   const data = await pool.query(sql);
 
-  return res.status(StatusCodes.OK).json({ "data": data[0] });
+  return res.status(StatusCodes.OK).json({ "data": data[0], "count": data[0].length });
 });

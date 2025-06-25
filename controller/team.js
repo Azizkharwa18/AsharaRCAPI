@@ -3,8 +3,8 @@
  * @route POST /team
  */
 
-import { tryCatchWrapper } from "./../middleware/tryCatchWrapper.js";
-import { pool } from "./../db/connect.js"
+import { tryCatchWrapper } from "../middleware/tryCatchWrapper.js";
+import { pool } from "../db/connect.js"
 import { createBadRequest } from "../middleware/bad-request.js";
 import { StatusCodes } from "http-status-codes";
 import xlsx from "xlsx";

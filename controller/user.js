@@ -3,9 +3,9 @@
  * @route POST /person
  */
 
-import { tryCatchWrapper } from "./../middleware/tryCatchWrapper.js";
-import { createCustomError } from "./../errors/customError.js";
-import { pool } from "./../db/connect.js"
+import { tryCatchWrapper } from "../middleware/tryCatchWrapper.js";
+import { createCustomError } from "../errors/customError.js";
+import { pool } from "../db/connect.js"
 import { createBadRequest } from "../middleware/bad-request.js";
 import { unauthenticatedError } from "../middleware/unauthenticated.js";
 import { StatusCodes } from "http-status-codes";

@@ -24,3 +24,18 @@ export const createEvent = tryCatchWrapper(async function (req, res, next) {
 })
 
 
+//Get All Events
+export const getAllEvents=tryCatchWrapper(async function(req,res,next){
+    let sql = `select e.eventId,e.eventName,e.startDate,e.endDate,e.loc,e.eventInchargeITS, p.name as eventInchargeName, count(t.teamId) as totalTeams from event e left join person p on e.eventInchargeITS=p.its left join team t on e.eventId=t.onEvent group by e.eventId;`
+    await pool.query(sql).then((result) => {
+        return res.status(StatusCodes.OK).json({
+            message: "Events Fetched Successfully",
+            data: result
+        })
+    })
+})
+
+
+
+
+

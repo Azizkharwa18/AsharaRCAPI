@@ -2,11 +2,17 @@ import express from "express";
 import {
     createAttendance,
     getAttendance,
-    markAttendance
+    markAttendance,
+    getAttendanceId,
+    getAttendanceHistory
 } from "../controller/attendance.js";
 
 const router = express.Router();
 
-router.route("/").post(createAttendance).get(getAttendance).patch(markAttendance);
+router.route("/getAttendanceId").get(getAttendanceId);
+router.route("/getAttendanceHistory/:id").get(getAttendanceHistory)
+router.route("/").post(createAttendance).patch(markAttendance)
+router.route("/:id").get(getAttendance)
+
 
 export default router;

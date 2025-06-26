@@ -6,9 +6,7 @@ import Login from '../model/login.js';
 
 export const getLoginById = tryCatchWrapper(async (req, res, next) => {
     const { its, password } = req.body
-    
-    console.log("ID>>", req.body)
-    
+
     if (!its|| !password)
         return next(createBadRequest("Please Provide ITS Password"))
     
@@ -23,7 +21,7 @@ export const getLoginById = tryCatchWrapper(async (req, res, next) => {
         return next(unauthenticatedError("Invalid Credentails"))
 
     const token = result.createJWT()
-    res.status(StatusCodes.OK).json({ "team":result.team, token })
+    res.status(StatusCodes.OK).json({ "team":result.team,"its":its, token })
 })
 
 export const createlogin = tryCatchWrapper(async (req, res, next) => {

@@ -18,9 +18,9 @@ export const createAttendance = tryCatchWrapper(async function (req, res, next) 
 
     for (let i = 0; i < itsData[0].length; i++) {
         if (itsData[0].length - 1 == i)
-            string += `(401, ${itsData[0][i].its})`
+            string += `(402, ${itsData[0][i].its})`
         else
-            string += `(401, ${itsData[0][i].its}),`
+            string += `(402, ${itsData[0][i].its}),`
     }
 
     let sql = `insert into event_session (event_session_id,its) values ${string}`

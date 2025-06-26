@@ -37,7 +37,8 @@ export const getAttendance = tryCatchWrapper(async function (req, res, next) {
     const { id } = req.params
     const its = id.split("&")[0]
     const teamId = id.split("&")[1]
-    console.log(its,"::",teamId)
+    
+    
     let sql;
     if (its == 60433342) {
         sql = `select event_session_id,event_session.its,isPresent,person.name,session_master.session_name,event.eventName from event_session inner join person on person.its=event_session.its inner join session_master on session_master.session_id=event_session.event_session_id inner join event on event.eventId=session_master.event_id where session_start<now() and session_end>now() and session_master.isActive=1 order by (person.name)`
@@ -47,6 +48,7 @@ export const getAttendance = tryCatchWrapper(async function (req, res, next) {
                 total_present: result[0].filter((item) => item.isPresent === 1).length,
                 session_name: result[0][0]?.session_name,
                 event_name: result[0][0]?.eventName,
+            event_session_id:result[0][0]?.event_session_id
             })
         }).catch((err) => {
             return next(createBadRequest("Error fetching attendance"))
@@ -102,11 +104,11 @@ export const getAttendanceId = tryCatchWrapper(async function (req, res, next) {
 
 export const markAttendance = tryCatchWrapper(async function (req, res, next) {
 
-    const { its } = req.body;
+    const { its,event_session } = req.body;
 
-    let sql = `update event_session set isPresent=1 where event_session_id=400 and its=${its}`
+    let sql = `update event_session set isPresent=1 where event_session_id=? and its=?`
 
-    await pool.query(sql).then((result) => {
+    await pool.query(sql,[event_session,its]).then((result) => {
         return res.status(StatusCodes.OK).json({
             message: "Attendance Marked Successfully",
         })

@@ -11,8 +11,8 @@ const router = express.Router();
 
 router.route("/getAttendanceId").get(getAttendanceId);
 router.route("/getAttendanceHistory/:id").get(getAttendanceHistory)
-router.route("/").post(createAttendance).patch(markAttendance)
 router.route("/:id").get(getAttendance)
+router.route("/").post(createAttendance).patch(markAttendance)
 
 
 export default router;

@@ -99,11 +99,11 @@ export const getAttendanceHistory = tryCatchWrapper(async function (req, res, ne
     let sql;
 
     if (sqlData.length == 1) {
-        sql = `select event_session_id,event_session.its,isPresent,person.name,session_master.session_name,event.eventName from event_session inner join person on person.its=event_session.its inner join session_master on session_master.session_id=event_session.event_session_id inner join event on event.eventId=session_master.event_id where event_session_id= ? `
+        sql = `select event_session_id,event_session.its,isPresent,person.name,session_master.session_name,event.eventName from event_session inner join person on person.its=event_session.its inner join session_master on session_master.session_id=event_session.event_session_id inner join event on event.eventId=session_master.event_id where event_session_id= ? order by (isPresent) desc, (person.name)`
 
     }
     else {
-        sql = `select t.teamName,t.teamLeadITS,p.its,p.name,p.contact_no,p.zone,event_session.event_session_id,event_session.isPresent from team as t inner join team_assignment as tn on tn.team_id=t.teamId inner join person as p on tn.its = p.its inner join event_session on event_session.its=p.its where event_session.event_session_id=? and  t.teamId= ? order by p.name`
+        sql = `select t.teamName,t.teamLeadITS,p.its,p.name,p.contact_no,p.zone,event_session.event_session_id,event_session.isPresent from team as t inner join team_assignment as tn on tn.team_id=t.teamId inner join person as p on tn.its = p.its inner join event_session on event_session.its=p.its where event_session.event_session_id=? and  t.teamId= ? order by (isPresent) desc, (person.name)`
     }
 
     await pool.query(sql, sqlData).then((result) => {

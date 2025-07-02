@@ -103,7 +103,7 @@ export const getAttendanceHistory = tryCatchWrapper(async function (req, res, ne
 
     }
     else {
-        sql = `select t.teamName,t.teamLeadITS,p.its,p.name,p.contact_no,p.zone,event_session.event_session_id,event_session.isPresent from team as t inner join team_assignment as tn on tn.team_id=t.teamId inner join person as p on tn.its = p.its inner join event_session on event_session.its=p.its where event_session.event_session_id=? and  t.teamId= ? order by (isPresent) desc, (person.name)`
+        sql = `select t.teamName,t.teamLeadITS,p.its,p.name,p.contact_no,p.zone,event_session.event_session_id,event_session.isPresent from team as t inner join team_assignment as tn on tn.team_id=t.teamId inner join person as p on tn.its = p.its inner join event_session on event_session.its=p.its where event_session.event_session_id=? and  t.teamId= ? order by (isPresent) desc, (p.name)`
     }
 
     await pool.query(sql, sqlData).then((result) => {

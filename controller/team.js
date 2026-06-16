@@ -47,15 +47,19 @@ export const addTeamMember = tryCatchWrapper(
 //Bulk Team Add Member
 export const addBulkTeamMember = tryCatchWrapper(
     async function (req, res, next) {
+        const { teamId, sheetName } = req.body;
+        if (!teamId || !sheetName) {
+            return next(createBadRequest("Team ID and Sheet Name is required"));
+        }
         let string = "";
-        const file = xlsx.readFile('assets/bgi_allotment_charts.xlsx')
-        const temp = xlsx.utils.sheet_to_json(file.Sheets["Zonal-Najmi"])
+        const file = xlsx.readFile('assets/BGR_Ashara_1448_Data.xlsx')
+        const temp = xlsx.utils.sheet_to_json(file.Sheets[sheetName])
         console.log(temp.length)
         for (let i = 0; i < temp.length; i++) {
             if (temp.length - 1 == i)
-                string += `(110, ${temp[i].its}, 60433342)`
+                string += `(${teamId}, ${temp[i].its}, 60433342)`
             else
-                string += `(110, ${temp[i].its}, 60433342),`
+                string += `(${teamId}, ${temp[i].its}, 60433342),`
         }
 
         let sql = `insert into team_assignment (team_id, its, addedBy) values ${string}`

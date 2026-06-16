@@ -6,14 +6,11 @@ import role from "./router/role.js";
 import login from "./router/login.js";
 import team from "./router/team.js";
 import attendance from "./router/attendance.js";
-import { connectdb } from './db/mongoConnect.js'
 import { testConnection } from "./db/connect.js";
-
-dotenv.config();
+import config from "./utils/config.js";
 
 const app = express();
-const port = process.env.PORT || 3000;
-const mongoport = process.env.PORTFORMONGO || 27017;
+const port = config.port || 3000;
 
 //middleware
 app.use(cors({ origin: "*" }));
@@ -27,23 +24,10 @@ app.use("/api/v1/login", login);
 app.use("/api/v1/team", team);
 app.use("/api/v1/attendance", attendance);
 
-const start = async () => {
-    try {
-        await connectdb(process.env.MONGO_URL, console.log("Connection Established with Database"))
-        //Server Initiated
-        app.listen(mongoport,
-            console.log(`Mongo Listening at port ${mongoport}`));
-    } catch (error) {
-        console.log(error)
-    }
-}
-
-start()
-
 testConnection();
 
 app.listen(port, () => {
-  console.log(`Express server running on port ${port}`);
+    console.log(`Express server running on port ${port}`);
 });
 
 

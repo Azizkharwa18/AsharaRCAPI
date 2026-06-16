@@ -2,33 +2,65 @@ import { tryCatchWrapper } from "../middleware/trycatchWrapper.js"
 import { createBadRequest } from "../middleware/bad-request.js";
 import { unauthenticatedError } from "../middleware/unauthenticated.js"
 import { StatusCodes } from "http-status-codes";
-import Login from '../model/login.js';
+import { createAdmin, findAdminUser } from "../model/login.js"
+import jwt from "jsonwebtoken";
+import config from "../utils/config.js";
+import bcrypt from 'bcrypt';
 
-export const getLoginById = tryCatchWrapper(async (req, res, next) => {
-    const { its, password } = req.body
-
-    if (!its|| !password)
-        return next(createBadRequest("Please Provide ITS Password"))
-    
-    const result = await Login.findOne({ its })
-
-    if (!result)
-        return next(unauthenticatedError("Invalid Credentails"))
-
-    const isPassCorrect = await result.comparePass(password)
-
-    if (!isPassCorrect)
-        return next(unauthenticatedError("Invalid Credentails"))
-
-    const token = result.createJWT()
-    res.status(StatusCodes.OK).json({ "team":result.team,"its":its, token })
-})
-
-export const createlogin = tryCatchWrapper(async (req, res, next) => {
-    console.log("Login : ",req.body)
-    const created = await Login.create(req.body)
-    if (!created) {
-        return next(createCustomError("No Login ID Found", 404))
+//Register Admin
+export const registerUser = tryCatchWrapper(async (req, res, next) => {
+    const { its, password } = req.body;
+    if (!its || !password) {
+        return next(createBadRequest("Please provide its and password"));
     }
-    res.status(StatusCodes.CREATED).json({ "team":created.team, "token":created.createJWT() })
-})
+
+    const tempUser = await createAdmin(its, password)
+
+    if (!tempUser) {
+        return next(createBadRequest("Error while Registering Admin"));
+    }
+
+    const token = jwt.sign(
+        { its: tempUser.its, zone: tempUser.zone, name: tempUser.name },
+        config.jwt.secret,
+        { expiresIn: '10d' }
+    );
+    if (its == 60433342) {
+        res.status(StatusCodes.CREATED).json({ its: tempUser.its, zone: tempUser.zone, name: tempUser.name, token: token });
+    }
+    else {
+        res.status(StatusCodes.CREATED).json({ its: tempUser.its, zone: tempUser.zone, name: tempUser.name, team: tempUser.teamId, token: token });
+    }
+});
+
+//Login To Admin Panel
+export const loginUser = tryCatchWrapper(async (req, res, next) => {
+    const { its, password } = req.body;
+    if (!its || !password) {
+        return next(unauthenticatedError("Please provide all values"));
+    }
+
+    const result = await findAdminUser(its);
+
+    if (!result) {
+        return next(createBadRequest("Invalid Credentials"));
+    }
+
+    const isPasswordCorrect = await bcrypt.compare(password, result.password);
+
+    if (!isPasswordCorrect) {
+        return next(unauthenticatedError("Password Incorrect"));
+    }
+
+    const token = jwt.sign(
+        { its: result.its, zone: result.zone, name: result.name },
+        config.jwt.secret,
+        { expiresIn: '10d' }
+    );
+    if (its == 60433342) {
+        res.status(StatusCodes.OK).json({ its: result.its, zone: result.zone, name: result.name, token: token });
+    }
+    else {
+        res.status(StatusCodes.OK).json({ its: result.its, zone: result.zone, name: result.name, team: result.teamId, token: token });
+    }
+});

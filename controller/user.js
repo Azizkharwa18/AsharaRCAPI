@@ -16,12 +16,12 @@ import xlsx from "xlsx";
 export const createUser = tryCatchWrapper(async function (req, res, next) {
   console.log("createUser() Req:", req.body)
   const { its, name, age, whatsapp, contact_no, zone } = req.body;
-  if (!its || !name || !age || !whatsapp || !contact_no || !zone) {
+  if (!its || !name || !zone) {
     return next(createBadRequest("All fields are required"));
   }
 
-  let sql = "INSERT INTO person (its,name,age,whatsapp,contact_no,zone) VALUES (?, ?, ?, ?, ?, ?)";
-  await pool.query(sql, [its, name, age, whatsapp, contact_no, zone]);
+  let sql = "INSERT INTO person (its,name,zone) VALUES (?, ?, ?)";
+  await pool.query(sql, [its, name, zone]);
 
   return res.status(StatusCodes.CREATED).json({ message: "User has been Created" });
 });
@@ -29,24 +29,25 @@ export const createUser = tryCatchWrapper(async function (req, res, next) {
 //Create New Users In Bulk
 export const creatBulkUser = tryCatchWrapper(async function (req, res, next) {
   console.log("creatBulkUser() Req:", req.body)
-
-  const file = xlsx.readFile('assets/combined_members_list.xlsx')
-  // // const temp = xlsx.utils.sheet_to_json(file.Sheets[file.SheetNames[0]])
+  const { sheetName } = req.body;
+  if (!sheetName) {
+    return next(createBadRequest("Sheet Name is required"));
+  }
+  const file = xlsx.readFile('assets/BGR_Ashara_1448_Data.xlsx')
+  const temp = xlsx.utils.sheet_to_json(file.Sheets[sheetName])
   var string = "";
   console.log("temp:", temp.length);
-  /*const { list } = req.body;
-  if (!list) {
-    return next(createBadRequest("All fields are required"));
+
+  for (let i = 0; i < temp.length; i++) {
+    if (temp.length - 1 == i)
+      string += `(${temp[i].its}, '${temp[i].name}', '${temp[i].zone}')`
+    else
+      string += `(${temp[i].its}, '${temp[i].name}', '${temp[i].zone}'),`
   }
 
-  let sql = "INSERT INTO person (its,name,age,whatsapp,contact_no,zone) VALUES ?";
-  await pool.query(sql, [list]);
-*/
-
-  let sql = `INSERT INTO person (its,name,whatsapp,contact_no,zone) VALUES ${string}`;
-  console.log("SQL:", sql);
+  let sql = `INSERT INTO person (its,name,zone) VALUES ${string}`;
   await pool.query(sql);
-  return res.status(StatusCodes.CREATED).json({ message: "Users has been Created" });
+  return res.status(StatusCodes.CREATED).json({ message: "Users have been Created" });
 });
 
 //update User Details : Under Work

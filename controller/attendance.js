@@ -7,8 +7,7 @@ import { tryCatchWrapper } from "../middleware/trycatchWrapper.js";
 import { pool } from "../db/connect.js"
 import { createBadRequest } from "../middleware/bad-request.js";
 import { StatusCodes } from "http-status-codes";
-import xlsx from 'xlsx';
-
+import exceljs from 'exceljs';
 
 export const createAttendance = tryCatchWrapper(async function (req, res, next) {
 
@@ -41,7 +40,6 @@ export const createAttendance = tryCatchWrapper(async function (req, res, next) 
     })
 
 })
-
 
 export const getAttendance = tryCatchWrapper(async function (req, res, next) {
 
@@ -85,10 +83,10 @@ export const getAttendanceHistory = tryCatchWrapper(async function (req, res, ne
 
     const { id } = req.params;
 
-    console.log("ID REQ:",id)
+    console.log("ID REQ:", id)
 
-    if(!id)
-        return next(createBadRequest("Error fetching Attendance Gistory"))
+    if (!id)
+        return next(createBadRequest("Error fetching Attendance History"))
 
     let sqlData = []
     sqlData.push(id.split("&")[0])
@@ -116,6 +114,14 @@ export const getAttendanceHistory = tryCatchWrapper(async function (req, res, ne
     }).catch((err) => {
         return next(createBadRequest("Error fetching attendance history"))
     })
+
+    const workbook = new exceljs.Workbook();
+    const worksheet = workbook.addWorksheet("Members")
+    res.setHeader('Content-Type', 'application/vnd.openxmlformats-officedocument.spreadsheetml.sheet')
+    res.setHeader('Content-Disposition', 'attachment;filename="user.xlsx"');
+    await workbook.xlsx.write(res);
+    res.end();
+
 })
 
 export const getAttendanceId = tryCatchWrapper(async function (req, res, next) {

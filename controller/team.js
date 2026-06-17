@@ -74,7 +74,7 @@ export const addBulkTeamMember = tryCatchWrapper(
 //Get All Teams
 export const getAllTeamId = tryCatchWrapper(async function (req, res, next) {
     console.log("getAllTeamId called");
-    let sql = `select t.teamId,t.teamName from team as t inner join event on t.onEvent=event.eventId where event.eventId = 201`
+    let sql = `select t.teamId,t.teamName from team as t inner join event on t.onEvent=event.eventId where event.eventId = 100`
 
     const data = await pool.query(sql)
 
@@ -112,7 +112,7 @@ export const getATeamWithMembers = tryCatchWrapper(async function (req, res, nex
 //Get all Team with Members
 export const getAllTeamWithMembers = tryCatchWrapper(async function (req, res, next) {
 
-    let sql = ` select t.teamId from team as t inner join event on t.onEvent=event.eventId where event.eventId=200 `
+    let sql = ` select t.teamId from team as t inner join event on t.onEvent=event.eventId where event.eventId=100 `
 
     let tempList = await pool.query(sql)
 

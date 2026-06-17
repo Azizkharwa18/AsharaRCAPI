@@ -125,7 +125,7 @@ export const getAttendanceHistory = tryCatchWrapper(async function (req, res, ne
 })
 
 export const getAttendanceId = tryCatchWrapper(async function (req, res, next) {
-    let sql = `select session_id,session_name from session_master where event_id=201`
+    let sql = `select session_id,session_name from session_master where event_id=100`
 
     await pool.query(sql).then((result) => {
         return res.status(StatusCodes.OK).json({

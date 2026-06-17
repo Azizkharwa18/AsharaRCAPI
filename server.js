@@ -1,5 +1,4 @@
 import express from "express";
-import dotenv from "dotenv";
 import cors from "cors";
 import user from "./router/user.js";
 import role from "./router/role.js";
